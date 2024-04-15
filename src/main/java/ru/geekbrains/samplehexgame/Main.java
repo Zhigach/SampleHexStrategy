@@ -1,10 +1,10 @@
 package ru.geekbrains.samplehexgame;
 
-import ru.geekbrains.hexcore.Battlefield;
-import ru.geekbrains.hexcore.RectangleMapInitializer;
-import ru.geekbrains.hexcore.core.GameEngine;
-import ru.geekbrains.hexcore.core.Player;
-import ru.geekbrains.hexcore.model.Tile;
+
+import ru.geekbrains.hexcore.utils.RectangleBattlefieldInitializer;
+import ru.geekbrains.hexcore.core.model.tiles.Tile;
+import ru.geekbrains.hexcore.core.service.Battlefield;
+import ru.geekbrains.hexcore.core.service.GameEngine;
 import ru.geekbrains.samplehexgame.players.RandomAIPlayer;
 import ru.geekbrains.samplehexgame.tiles.terrain.Forest;
 import ru.geekbrains.samplehexgame.tiles.terrain.River;
@@ -52,7 +52,7 @@ public class Main {
 
     private static void initBattlefield(Battlefield battlefield) {
         Battlefield.setDimensions(-4, 4, -6, 6); // C&C field
-        Battlefield.setMapInitializer(new RectangleMapInitializer());
+        Battlefield.setMapInitializer(new RectangleBattlefieldInitializer());
         SwingViewer battlefieldDrawer = new SwingViewer(battlefield);
         battlefieldDrawer.setGUI();
         battlefield.initializeMap();
