@@ -6,7 +6,6 @@ import java.awt.*;
 
 public class UnitDrawer {
 
-
     public static void draw(Graphics2D g2, Unit unit, int size, Point centerPoint) {
         String shortName = unit.getClass().getSimpleName().chars().filter(Character::isUpperCase).map(c -> ((char) c))
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)

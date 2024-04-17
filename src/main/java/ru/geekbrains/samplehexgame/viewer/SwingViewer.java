@@ -17,8 +17,6 @@ import ru.geekbrains.viewer.interfaces.BattlefieldPresenter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 import static java.lang.Math.sqrt;
@@ -30,14 +28,8 @@ public class SwingViewer implements BattlefieldPresenter {
     private JFrame jFrame;
     private DrawingPanel drawingPanel;
 
-    Color COLOURBACK = Color.GREEN;
-    //Color COLOURCELL = Color.ORANGE;
-    //Color COLOURGRID = Color.BLACK;
-    //Color COLOURONE = new Color(255, 255, 255, 200);
-    //Color COLOURONETXT = Color.BLUE;
-    //Color COLOURTWO = new Color(0, 0, 0, 200);
-    //Color COLOURTWOTXT = new Color(255, 0, 255);
-    final int HEX_SIZE = 50;    //hex size in pixels
+    Color COLOUR_BACK = Color.GREEN;
+    final int HEX_SIZE = 50;
     final int BORDERS = 15;
     int SCR_HEIGHT;
     int SCR_WIDTH;
@@ -112,8 +104,7 @@ public class SwingViewer implements BattlefieldPresenter {
     class DrawingPanel extends JPanel {
 
         public DrawingPanel() {
-            setBackground(COLOURBACK);
-            addMouseListener(myMouseAdapter);
+            setBackground(COLOUR_BACK);
         }
 
         @Override
@@ -124,22 +115,12 @@ public class SwingViewer implements BattlefieldPresenter {
             g2.setFont(f);
             super.paintComponent(g2);
 
-            //draw grid
-            List<List<Tile>> hexes = battlefield.getTiles().values().stream().toList();
-            log.trace("Battlefield contains {} hexes to draw. Repainting...", hexes.size());
+            //battlefield.getTiles().keySet().size();
+            //List<List<Tile>> hexes = battlefield.getTiles().values().stream().toList();
+            log.trace("Battlefield contains {} hexes to draw. Repainting...", battlefield.getTiles().keySet().size());
             for (Hex hex : battlefield.getTiles().keySet()) {
                 draw(hex, g2);
             }
         }
-
-        private MouseAdapter myMouseAdapter = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int x = e.getX();
-                int y = e.getY();
-                //Hexmech.drawHex(e.getPoint(), 10, (Graphics2D) DrawingPanel.super.getGraphics());
-                repaint();
-            }
-        };
-    } // end of DrawingPanel class
+    }
 }

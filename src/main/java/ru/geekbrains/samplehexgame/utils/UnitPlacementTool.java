@@ -13,7 +13,6 @@ public class UnitPlacementTool {
         if (quantity >= battlefield.getHorizontalSize()) {
             throw new IllegalArgumentException("Illegal quantity");
         }
-        //for (int r : new int[]{Battlefield.top + 2, Battlefield.bottom -2}) {
         int r = 0;
         if (row > 0) {
             r = Battlefield.top + row;
@@ -24,7 +23,6 @@ public class UnitPlacementTool {
         for (int q = Battlefield.left + delta; q <= Battlefield.right - delta; q++) {
             Hex hex = new Hex(-q - r, q, r);
             Unit unit = unitClass.getConstructor(Player.class, Hex.class).newInstance(owner, hex);
-            //battlefield.putTile(hex, unit);
             battlefield.updateView();
         }
 

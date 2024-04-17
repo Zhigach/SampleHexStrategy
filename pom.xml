@@ -17,7 +17,7 @@
         <dependency>
             <groupId>ru.geekbrains</groupId>
             <artifactId>HexStrategyEngine</artifactId>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
             <scope>system</scope>
             <systemPath>/home/zal/IdeaProjects/HexStrategyEngine/target/HexStrategyEngine-0.0.3-jar-with-dependencies.jar</systemPath>
         </dependency>
@@ -26,6 +26,12 @@
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- possible logback fix -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.1</version>
         </dependency>
     </dependencies>
 </project>

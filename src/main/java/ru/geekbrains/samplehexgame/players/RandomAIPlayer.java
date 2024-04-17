@@ -38,24 +38,14 @@ public class RandomAIPlayer extends Player {
             unit.restoreMovementPoint();
             Set<Hex> movementReachableHexes = unit.getReachableHexes(unit.getMovementPoints());
             Set<Unit> reachableByAttackEnemies = new HashSet<>();
-            Set<Unit> reachableUnits = new HashSet<>();
             movementReachableHexes
                     .forEach(h -> h.getHexesInRange(unit.getAttack().getRange())
                             .stream()
                             .forEach(hoi -> battlefield.getUnitsByCoordinate(hoi)
                                     .stream()
-                                    .filter( u -> !u.getOwner().equals(this) && battlefield.getTerrainByCoordinate(h).hasLOS(u)).forEach(reachableByAttackEnemies::add)));
+                                    .filter(u -> !u.getOwner().equals(this) && battlefield.getTerrainByCoordinate(h).hasLOS(u))
+                                    .forEach(reachableByAttackEnemies::add)));
             Unit attackCandidate = reachableByAttackEnemies.stream().min(Comparator.comparingInt(u -> u.getHex().findDistance(unit.getHex()))).orElse(null);
-
-            /*movementReachableHexes.forEach( hex -> {
-                battlefield.getUnitsByCoordinate(hex)
-                        .stream().filter(u -> !u.getOwner().equals(this)).forEach(reachableUnits::add);
-            });
-
-            Unit attackCandidate = reachableUnits.stream()
-                    .min(Comparator.comparingInt(u -> u.getHex().findDistance(unit.getHex())))
-                    .orElse(null);
-             */
 
             if (attackCandidate != null) {
                 if (unit.getHex().findDistance(attackCandidate.getHex()) > unit.getAttack().getRange()) {
@@ -67,11 +57,13 @@ public class RandomAIPlayer extends Player {
                         .stream()
                         .filter(p -> !p.equals(this))
                         .findFirst().get();
-                attackCandidate = enemy.getUnits().get(0);
-                gameEngine.moveUnit(unit, unit.getPathTo(attackCandidate));
-                //enemy.getUnits().stream().sorted(u -> unit.getHex().findDistance(u.getHex()))
+                if (enemy.getUnits().isEmpty()) {
+                    return;
+                } else {
+                    attackCandidate = enemy.getUnits().get(0);
+                    gameEngine.moveUnit(unit, unit.getPathTo(attackCandidate));
+                }
             }
-
         }
     }
 }

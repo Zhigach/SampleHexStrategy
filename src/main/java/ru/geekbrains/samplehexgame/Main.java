@@ -21,9 +21,9 @@ public class Main {
         Battlefield battlefield = Battlefield.getInstance();
         initBattlefield(battlefield);
 
-        RandomAIPlayer p1 = new RandomAIPlayer("FirstPlayer");
+        RandomAIPlayer p1 = new RandomAIPlayer("REDPlayer");
         p1.setColor(Color.RED);
-        RandomAIPlayer p2 = new RandomAIPlayer("SecondPlayer");
+        RandomAIPlayer p2 = new RandomAIPlayer("BLUEPlayer");
         p2.setColor(Color.BLUE);
 
         GameEngine gameEngine = new GameEngine(List.of(p1, p2), battlefield);
@@ -36,9 +36,6 @@ public class Main {
         Tile river2 = new River(1, -1, 0);
         Tile river3 = new River(1, 0, -1);
         Tile river4 = new River(-1, 1, 0);
-
-        //Unit lineInfantry = new SampleInfantry(p1, new Hex(0, 0, 0));
-        //Unit dummyTarget = new SampleInfantry(p2, new Hex(0, -2, 2));
 
         try {
             UnitPlacementTool.placeUnits(battlefield, 2,4, SampleInfantry.class, p1);
