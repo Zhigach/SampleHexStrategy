@@ -8,7 +8,7 @@ import ru.geekbrains.hexcore.core.service.GameEngine;
 import ru.geekbrains.samplehexgame.players.RandomAIPlayer;
 import ru.geekbrains.samplehexgame.tiles.terrain.Forest;
 import ru.geekbrains.samplehexgame.tiles.terrain.River;
-import ru.geekbrains.samplehexgame.tiles.units.SampleInfantry;
+import ru.geekbrains.samplehexgame.tiles.units.RangedInfantry;
 import ru.geekbrains.samplehexgame.utils.UnitPlacementTool;
 import ru.geekbrains.samplehexgame.viewer.SwingViewer;
 
@@ -38,8 +38,8 @@ public class Main {
         Tile river4 = new River(-1, 1, 0);
 
         try {
-            UnitPlacementTool.placeUnits(battlefield, 2,4, SampleInfantry.class, p1);
-            UnitPlacementTool.placeUnits(battlefield, -2,4, SampleInfantry.class, p2);
+            UnitPlacementTool.placeUnits(battlefield, 2,4, RangedInfantry.class, p1);
+            UnitPlacementTool.placeUnits(battlefield, -2,4, RangedInfantry.class, p2);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
