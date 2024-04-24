@@ -6,13 +6,13 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import ru.geekbrains.hexcore.core.model.game.Player;
 import ru.geekbrains.hexcore.core.model.tiles.Hex;
+import ru.geekbrains.hexcore.core.model.tiles.Tile;
 import ru.geekbrains.hexcore.core.model.tiles.Unit;
 
 
 import java.awt.*;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -38,18 +38,35 @@ public class RandomAIPlayer extends Player {
             unit.restoreMovementPoint();
             Set<Hex> movementReachableHexes = unit.getReachableHexes(unit.getMovementPoints());
             Set<Unit> reachableByAttackEnemies = new HashSet<>();
-            movementReachableHexes
-                    .forEach(h -> h.getHexesInRange(unit.getAttack().getRange())
-                            .stream()
-                            .forEach(hoi -> battlefield.getUnitsByCoordinate(hoi)
-                                    .stream()
-                                    .filter(u -> !u.getOwner().equals(this) && battlefield.getTerrainByCoordinate(h).hasLOS(u))
-                                    .forEach(reachableByAttackEnemies::add)));
-            Unit attackCandidate = reachableByAttackEnemies.stream().min(Comparator.comparingInt(u -> u.getHex().findDistance(unit.getHex()))).orElse(null);
+            Map<Unit, Tile> hexAttackableUnitMap = new HashMap<>();
+
+            // Find enemies that can be attacked
+            Set<Hex> hexesUnderAttack = new HashSet<>();
+            for (Hex hex : movementReachableHexes) {
+                Set<Hex> attackableHexes = hex.getHexesInRange(unit.getAttack().getRange());
+                for (Hex attackableHex : attackableHexes) {
+                    if ( hexesUnderAttack.contains(attackableHex) ) {
+                        continue;
+                    }
+                    else {
+                        hexesUnderAttack.add(attackableHex);
+                        Set<Unit> enemies = battlefield.getUnitsByCoordinate(attackableHex)
+                                .stream()
+                                .filter(u -> !u.getOwner().equals(this) && battlefield.getTerrainByCoordinate(hex).hasLOS(u))
+                                .collect(Collectors.toSet());
+                        enemies.forEach(e -> hexAttackableUnitMap.put(e, battlefield.getTerrainByCoordinate(hex)));
+                    }
+                }
+            }
+
+            // Pick the closest enemy and go to the
+            Unit attackCandidate = hexAttackableUnitMap.keySet().stream()
+                    .min(Comparator.comparingInt( e -> e.getHex().findDistance(hexAttackableUnitMap.get(e).getHex()))).orElse(null);
+
 
             if (attackCandidate != null) {
                 if (unit.getHex().findDistance(attackCandidate.getHex()) > unit.getAttack().getRange()) {
-                    gameEngine.moveUnit(unit, unit.getPathTo(attackCandidate));
+                    gameEngine.moveUnit(unit, unit.getPathTo(hexAttackableUnitMap.get(attackCandidate)));
                 }
                 gameEngine.attack(unit, attackCandidate);
             } else {
